@@ -2,6 +2,10 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <logger name="http-request-logger" level="INFO"/>
+    <logger name="org.gatekeeper.server" level="DEBUG"/>
+
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
