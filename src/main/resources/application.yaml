@@ -1,1 +1,18 @@
-info.service.branch: ${BRANCH}
+spring:
+  main:
+    banner-mode: off
+
+metrics.graphite:
+  enabled: false
+  host: #
+  port: 3000
+  prefix: 'gatekeeper-sparrow'
+  interval: 30
+  intervalSeconds: SECONDS
+
+vertx.http-server:
+  port: 8080
+  maxHeaderSize: 16384
+  idleTimeout: 10
+  ssl: false
+
