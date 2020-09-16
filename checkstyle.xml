@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+    <module name="SuppressWarningsFilter"/>
+    <property name="fileExtensions" value="java, properties, xml"/>
+
+    <module name="NewlineAtEndOfFile">
+        <property name="severity" value="warning"/>
+    </module>
+
+    <!--Rationale: Any source files and text files in general should end with
+    a line separator to let other easily add new content at the end of file
+    and "diff" command does not show previous lines as changed. -->
+    <module name="FileLength"/> <!-- default = 2000 -->
+    <module name="FileTabCharacter"/> <!-- Checks that there are no tab characters ('\t') in the source code. -->
+    <module name="TreeWalker">
+        <module name="Indentation">
+            <property name="lineWrappingIndentation" value="8"/>
+            <property name="arrayInitIndent" value="8"/>
+            <property name="forceStrictCondition" value="false"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+        </module>
+        <module name="LineLength">
+            <property name="max" value="120"/> <!-- line length -->
+            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|@see|//"/>
+            <property name="severity" value="ignore"/>
+        </module>
+        <module name="NoLineWrap"/> <!-- By default this Check restricts wrapping import and package statements,
+        but it's possible to check any statement-->
+        <module name="NeedBraces"/> <!-- Checks for braces around code blocks. Can be configured the check to allow single-line statements -->
+        <module name="ConstantName">
+            <property name="format" value="^([A-Z][A-Z0-9]*(_[A-Z0-9]+)*|logger)$"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="true"/>
+        </module>
+        <module name="ImportOrder">
+            <property name="option" value="bottom"/>
+            <property name="groups" value="*, javax, java"/>
+            <property name="ordered" value="true"/>
+            <property name="separated" value="false"/>
+            <property name="caseSensitive" value="true"/>
+            <property name="sortStaticImportsAlphabetically" value="true"/>
+            <property name="useContainerOrderingForStatic" value="false"/>
+        </module>
+        <module name="MethodLength"/>
+        <module name="EmptyForIteratorPad"/>
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"> <!-- Checks the padding between the identifier of a method definition, constructor definition,
+        method call, or constructor invocation and the left parenthesis of the parameter list-->
+            <property name="allowLineBreaks" value="false"/>
+        </module>
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="INC,DEC,UNARY_MINUS,UNARY_PLUS,BNOT,LNOT,DOT,ARRAY_DECLARATOR,INDEX_OP"/>
+            <property name="allowLineBreaks" value="true"/>
+        </module>
+        <module name="NoWhitespaceBefore"/>
+        <module name="OperatorWrap"> <!-- &&' should be on a new line. -->
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+        <module name="AnnotationLocation">
+            <property name="allowSamelineMultipleAnnotations" value="false"/>
+            <property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
+        </module>
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+        <module name="AvoidNestedBlocks"/>
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/> <!-- on the same line {-->
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+            <property name="tokens" value="LITERAL_ELSE, METHOD_DEF"/>
+        </module>
+        <module name="EmptyStatement"/>
+        <module name="EqualsHashCode"/> <!-- Checks that classes that either override equals() or hashCode() also overrides the other-->
+        <module name="InnerAssignment"/> <!--Checks for assignments in subexpressions, such as in String s = Integer.toString(i = 2);.-->
+        <module name="MissingSwitchDefault"/>
+        <module name="MissingOverride"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+        <module name="HideUtilityClassConstructor"> <!-- Utility classes should not have a public or default constructor -->
+            <property name="severity" value="info"/>
+        </module>
+        <module name="ArrayTypeStyle"/> <!-- int[] nums - OK, String strings[] - violation -->
+        <module name="CommentsIndentation">
+            <property name="severity" value="info"/>
+        </module>
+        <module name="UpperEll"/> <!-- 100L - OK, 100l - violation -->
+        <module name="IllegalThrows"/>
+        <module name="OneStatementPerLine"/>
+        <module name="OuterTypeFilename"/>
+        <module name="OverloadMethodsDeclarationOrder">
+            <property name="severity" value="info"/>
+        </module> <!--  Overload methods should not be split -->
+        <module name="SeparatorWrap">
+            <property name="option" value="nl"/>
+            <property name="tokens" value="DOT"/>
+            <property name="severity"
+                      value="warning"/> <!-- warning instead of error. Error is default value of severity -->
+        </module>
+        <module name="SeparatorWrap">
+            <property name="option" value="eol"/>
+            <property name="tokens" value="COMMA"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="SingleSpaceSeparator"/>
+        <module name="StringLiteralEquality"/> <!-- Checks that string literals are not used with == or != -->
+        <module name="UnnecessaryParentheses"/>
+        <module name="SuppressWarningsHolder"/> <!--It allows to prevent Checkstyle from reporting errors from parts of code that were annotated with @SuppressWarnings -->
+    </module>
+</module>
