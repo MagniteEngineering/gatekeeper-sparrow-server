@@ -7,10 +7,13 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.gatekeeper.server.ad.AdRequestService;
 import org.gatekeeper.server.dsp.DspBiddingsService;
 import org.gatekeeper.server.handler.FailureHandler;
+import org.gatekeeper.server.handler.NoCacheHandler;
 import org.gatekeeper.server.handler.RequestLogHandler;
 import org.gatekeeper.server.handler.ResponseHandler;
+import org.gatekeeper.server.handler.ad.AdRequestHandler;
 import org.gatekeeper.server.handler.dsp.BiddingModelHandler;
 import org.gatekeeper.server.handler.dsp.BiddingModelValidationHandler;
 import org.gatekeeper.server.handler.ssp.InventoryRulesHandler;
@@ -63,12 +66,21 @@ public class RouteConfiguration {
                 .handler(handlerRegistry.get("inventoryRulesHandler"))
                 .handler(handlerRegistry.get("responseHandler"));
 
+        router.get(SPARROW_API_V1_PREFIX + "/ad-request")
+                .handler(handlerRegistry.get("noCacheHandler"))
+                .handler(handlerRegistry.get("adRequestHandler"));
+
         router.get("/webroot/*").handler(handlerRegistry.get("staticHandler"));
         router.get("/").handler(handlerRegistry.get("staticHandler"));
 
         router.route()
                 .failureHandler(handlerRegistry.get("failureHandler"));
         return router;
+    }
+
+    @Bean
+    AdRequestHandler adRequestHandler(AdRequestService adRequestService) {
+        return new AdRequestHandler(adRequestService);
     }
 
     @Bean
@@ -111,4 +123,8 @@ public class RouteConfiguration {
         return new RequestLogHandler();
     }
 
+    @Bean
+    NoCacheHandler noCacheHandler() {
+        return new NoCacheHandler();
+    }
 }

@@ -1,7 +1,6 @@
-package org.gatekeeper.server.handler.dsp;
+package org.gatekeeper.server.handler.dsp.model;
 
 import lombok.Data;
-import org.gatekeeper.server.handler.dsp.model.Bidding;
 
 import java.util.Map;
 
