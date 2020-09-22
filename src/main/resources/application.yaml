@@ -16,3 +16,10 @@ vertx.http-server:
   idleTimeout: 10
   ssl: false
 
+spring.cache:
+  type: jcache
+  jcache.provider: org.ehcache.jsr107.EhcacheCachingProvider
+
+cache.ad-requests-cache:
+  durationAmount: 10
+  durationTimeUnit: SECONDS
