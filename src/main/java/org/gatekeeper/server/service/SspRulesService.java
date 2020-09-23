@@ -1,9 +1,10 @@
-package org.gatekeeper.server.ssp;
+package org.gatekeeper.server.service;
 
 import org.gatekeeper.server.handler.ssp.model.InventoryRule;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SspRulesService {
@@ -20,6 +21,6 @@ public class SspRulesService {
     }
 
     public List<InventoryRule> getInventoryRules(String sspId) {
-        return cache.get(sspId);
+        return Optional.ofNullable(cache.get(sspId)).orElse(List.of());
     }
 }

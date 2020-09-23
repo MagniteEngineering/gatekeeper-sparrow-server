@@ -5,10 +5,10 @@ import io.vertx.core.MultiMap;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.gatekeeper.server.ad.AdRequestService;
 import org.gatekeeper.server.handler.ad.model.AdRequest;
 import org.gatekeeper.server.handler.ad.model.RequestParam;
 import org.gatekeeper.server.handler.utils.HttpUtils;
+import org.gatekeeper.server.service.AdRequestService;
 
 @Slf4j
 public class AdRequestHandler implements Handler<RoutingContext> {
@@ -42,8 +42,7 @@ public class AdRequestHandler implements Handler<RoutingContext> {
         }
 
         adRequestService.cacheAdRequest(ad.getImpressionId(), ad);
-
-        log.debug("Cache: {}={}", ad.getImpressionId(), adRequestService.getAdRequest(ad.getImpressionId()));
+        log.debug("Cached ad request. Impression Id: {}", ad.getImpressionId());
         context.response()
                 .putHeader(HttpUtils.CACHE_CONTROL_HEADER, "no-cache")
                 .end();
@@ -54,6 +53,9 @@ public class AdRequestHandler implements Handler<RoutingContext> {
             return false;
         }
         if (StringUtils.isBlank(ad.getImpressionId())) {
+            return false;
+        }
+        if (StringUtils.isBlank(ad.getInterestGroup())) {
             return false;
         }
         return true;

@@ -19,7 +19,7 @@ public class FailureHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext event) {
-        log.debug("Internal error. Please fix");
+        log.error("Internal error. Please fix", event.failure());
         event.response()
                 .putHeader(HttpUtils.CONTENT_TYPE_HEADER, HttpHeaderValues.APPLICATION_JSON)
                 .end(mapper.encode(Response.fail(event.failure().toString())));

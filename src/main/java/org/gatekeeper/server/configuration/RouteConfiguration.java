@@ -7,19 +7,21 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.gatekeeper.server.ad.AdRequestService;
-import org.gatekeeper.server.dsp.DspBiddingsService;
 import org.gatekeeper.server.handler.FailureHandler;
 import org.gatekeeper.server.handler.NoCacheHandler;
 import org.gatekeeper.server.handler.RequestLogHandler;
 import org.gatekeeper.server.handler.ResponseHandler;
 import org.gatekeeper.server.handler.ad.AdRequestHandler;
+import org.gatekeeper.server.handler.bid.BidRequestPreauctionHandler;
+import org.gatekeeper.server.handler.bid.BidRequestValidationHandler;
 import org.gatekeeper.server.handler.dsp.BiddingModelHandler;
 import org.gatekeeper.server.handler.dsp.BiddingModelValidationHandler;
 import org.gatekeeper.server.handler.ssp.InventoryRulesHandler;
 import org.gatekeeper.server.handler.ssp.InventoryRulesValidationHandler;
 import org.gatekeeper.server.json.JacksonMapper;
-import org.gatekeeper.server.ssp.SspRulesService;
+import org.gatekeeper.server.service.AdRequestService;
+import org.gatekeeper.server.service.DspBiddingsService;
+import org.gatekeeper.server.service.SspRulesService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,12 +72,31 @@ public class RouteConfiguration {
                 .handler(handlerRegistry.get("noCacheHandler"))
                 .handler(handlerRegistry.get("adRequestHandler"));
 
+        router.post(SPARROW_API_V1_PREFIX + "/bid-request")
+                .handler(handlerRegistry.get("bidRequestValidationHandler"))
+                .handler(handlerRegistry.get("bidRequestPreauctionHandler"));
+
         router.get("/webroot/*").handler(handlerRegistry.get("staticHandler"));
         router.get("/").handler(handlerRegistry.get("staticHandler"));
 
         router.route()
                 .failureHandler(handlerRegistry.get("failureHandler"));
         return router;
+    }
+
+    @Bean
+    BidRequestValidationHandler bidRequestValidationHandler(
+            JacksonMapper jacksonMapper,
+            AdRequestService adRequestService) {
+        return new BidRequestValidationHandler(jacksonMapper, adRequestService);
+    }
+
+    @Bean
+    BidRequestPreauctionHandler bidRequestPreauctionHandler(
+            JacksonMapper jacksonMapper,
+            DspBiddingsService dspBiddingsService,
+            SspRulesService sspRulesService) {
+        return new BidRequestPreauctionHandler(jacksonMapper, dspBiddingsService, sspRulesService);
     }
 
     @Bean

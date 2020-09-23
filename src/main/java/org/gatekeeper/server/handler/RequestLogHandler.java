@@ -14,7 +14,7 @@ public class RequestLogHandler implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext event) {
         event.next();
-        REQUEST_LOGGER.info(
+        REQUEST_LOGGER.debug(
                 "Uri: \"{0}\". Body: \"{1}\".",
                 event.request().uri(),
                 event.getBody().toString());

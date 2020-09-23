@@ -35,7 +35,7 @@ public class BiddingModelValidationHandler implements Handler<RoutingContext> {
 
         BiddingModelRequest request = mapper.decodeValue(context.getBody(), BiddingModelRequest.class);
 
-        if (request.getBiddingModel().isEmpty()) {
+        if (request == null || request.getBiddingModel() == null || request.getBiddingModel().isEmpty()) {
             sendValidationError(context, MESSAGE_MODEL_REQUIRED);
             return;
         }

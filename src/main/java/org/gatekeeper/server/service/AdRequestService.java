@@ -1,4 +1,4 @@
-package org.gatekeeper.server.ad;
+package org.gatekeeper.server.service;
 
 import org.gatekeeper.server.handler.ad.model.AdRequest;
 
@@ -17,5 +17,9 @@ public class AdRequestService {
 
     public AdRequest getAdRequest(String impressionId) {
         return adRequestCache.get(impressionId);
+    }
+
+    public AdRequest popAdRequest(String impressionId) {
+        return adRequestCache.getAndRemove(impressionId);
     }
 }

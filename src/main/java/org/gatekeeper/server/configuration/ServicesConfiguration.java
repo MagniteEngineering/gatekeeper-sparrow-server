@@ -1,9 +1,9 @@
 package org.gatekeeper.server.configuration;
 
-import org.gatekeeper.server.ad.AdRequestService;
-import org.gatekeeper.server.dsp.DspBiddingsService;
+import org.gatekeeper.server.service.AdRequestService;
+import org.gatekeeper.server.service.DspBiddingsService;
 import org.gatekeeper.server.handler.ad.model.AdRequest;
-import org.gatekeeper.server.ssp.SspRulesService;
+import org.gatekeeper.server.service.SspRulesService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
