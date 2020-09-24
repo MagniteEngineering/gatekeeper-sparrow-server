@@ -1,8 +1,8 @@
-package org.gatekeeper.server.dsp;
+package org.gatekeeper.server.service;
 
 import org.gatekeeper.server.handler.dsp.model.Bidding;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,9 +19,8 @@ public class DspBiddingsService {
         cache.remove(dspId);
     }
 
-    public List<Bidding> getBiddings(String interest, String domain) {
-        // todo implement
-        return List.of();
+    public Map<String, Map<String, Bidding>> getBiddingModels() {
+        return new HashMap<>(cache);
     }
 
 }

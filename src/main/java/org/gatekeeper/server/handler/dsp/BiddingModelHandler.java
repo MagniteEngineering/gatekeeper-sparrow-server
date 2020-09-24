@@ -3,7 +3,7 @@ package org.gatekeeper.server.handler.dsp;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
-import org.gatekeeper.server.dsp.DspBiddingsService;
+import org.gatekeeper.server.service.DspBiddingsService;
 import org.gatekeeper.server.handler.dsp.model.BiddingModelContext;
 import org.gatekeeper.server.handler.utils.RequestContextUtils;
 

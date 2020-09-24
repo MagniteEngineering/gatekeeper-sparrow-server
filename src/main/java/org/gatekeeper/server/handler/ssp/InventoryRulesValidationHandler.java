@@ -35,7 +35,7 @@ public class InventoryRulesValidationHandler implements Handler<RoutingContext> 
 
         InventoryRulesRequest request = mapper.decodeValue(context.getBody(), InventoryRulesRequest.class);
 
-        if (request.getInventoryRules().isEmpty()) {
+        if (request == null || request.getInventoryRules() == null || request.getInventoryRules().isEmpty()) {
             sendValidationError(context, MESSAGE_MODEL_REQUIRED);
             return;
         }
