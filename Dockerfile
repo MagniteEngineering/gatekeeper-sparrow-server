@@ -18,14 +18,7 @@ RUN yum install -y java-11-amazon-corretto-devel
 RUN yum clean all
 COPY --from=builder /app/gatekeeper-sparrow-server/target/gatekeeper-sparrow-server.jar /app/gatekeeper-sparrow-server/gatekeeper-sparrow-server.jar
 
-EXPOSE 8005
-
 CMD [ \
     "java", \
-	"-Dcom.sun.management.jmxremote", \
-	"-Dcom.sun.management.jmxremote.port=8005", \
-	"-Dcom.sun.management.jmxremote.authenticate=false", \
-	"-Dcom.sun.management.jmxremote.ssl=false", \
 	"-Dspring.profiles.active=default", \
-	"-XX:+UseParallelGC", \
 	"-jar /app/gatekeeper-sparrow-server/gatekeeper-sparrow-server.jar"]
