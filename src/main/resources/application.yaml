@@ -13,7 +13,8 @@ metrics.graphite:
 vertx.http-server:
   port: 8080
   maxHeaderSize: 16384
-  idleTimeout: 10
+  idleTimeout: 30
+  idleTimeoutUnit: SECONDS
   ssl: false
 
 spring.cache:
@@ -23,3 +24,7 @@ spring.cache:
 cache.ad-requests-cache:
   durationAmount: 10
   durationTimeUnit: SECONDS
+
+request.ssp-bid-request:
+  ad-request-lookup-timeout-millis: 25000
+  bids-limit: 2

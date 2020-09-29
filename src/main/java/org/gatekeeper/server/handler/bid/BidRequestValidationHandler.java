@@ -5,6 +5,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.ext.web.RoutingContext;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -24,10 +25,12 @@ import java.util.concurrent.TimeUnit;
 public class BidRequestValidationHandler implements Handler<RoutingContext> {
 
     private static final long CACHE_POP_DELAY_MILLIS = 20;
-    private static final long CACHE_TIMEOUT_MILLIS = TimeUnit.SECONDS.toMillis(30);
+    private static final long CACHE_TIMEOUT_MILLIS = TimeUnit.SECONDS.toMillis(1);
 
     private static final Random RANDOM = new Random();
 
+    @Setter
+    private long adRequestLookupTimeoutMillis = CACHE_TIMEOUT_MILLIS;
     private JacksonMapper mapper;
     private AdRequestService adRequestService;
 
@@ -94,7 +97,7 @@ public class BidRequestValidationHandler implements Handler<RoutingContext> {
             AdRequest adRequest = adRequestService.popAdRequest(impressionId);
             if (adRequest != null) {
                 promise.complete(adRequest);
-            } else if (stopWatch.getTime() > CACHE_TIMEOUT_MILLIS) {
+            } else if (stopWatch.getTime() > adRequestLookupTimeoutMillis) {
                 promise.fail("No corresponding impression id found in cache");
             } else {
                 schedulePopAdRequest(context, impressionId, promise, stopWatch);
