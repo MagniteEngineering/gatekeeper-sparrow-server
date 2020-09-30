@@ -70,7 +70,7 @@ public class BidRequestPreauctionHandler implements Handler<RoutingContext> {
                         .ad(entry.getValue().get(interest).getAd())
                         .price(entry.getValue().get(interest).getPrice())
                         .build())
-                .sorted(Comparator.comparing(Bid::getPrice))
+                .sorted(Comparator.comparing(Bid::getPrice).reversed())
                 .limit(bidsLimit)
                 .collect(Collectors.toList());
 
@@ -82,8 +82,7 @@ public class BidRequestPreauctionHandler implements Handler<RoutingContext> {
             Rule rule = iRule.getRule();
 
             // filter by advertiser / dsp /floor
-            if (rule.getAdvertisers().contains(bidding.getAd().getAdvertiser())
-                    || rule.getDsps().contains(dspId)) {
+            if (isRuleByAdvertiser(rule, bidding.getAd().getAdvertiser()) || isRuleByDsp(rule, dspId)) {
                 if (Boolean.TRUE.equals(iRule.getBlock())) {
                     return false;
                 }
@@ -94,6 +93,14 @@ public class BidRequestPreauctionHandler implements Handler<RoutingContext> {
         }
 
         return true;
+    }
+
+    private boolean isRuleByAdvertiser(Rule rule, String advertiser) {
+        return rule.getAdvertisers() != null && rule.getAdvertisers().contains(advertiser);
+    }
+
+    private boolean isRuleByDsp(Rule rule, String dspId) {
+        return rule.getDsps() != null && rule.getDsps().contains(dspId);
     }
 
     private void okResponse(RoutingContext context, List<Bid> result) {

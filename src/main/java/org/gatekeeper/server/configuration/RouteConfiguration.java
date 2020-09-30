@@ -22,6 +22,7 @@ import org.gatekeeper.server.json.JacksonMapper;
 import org.gatekeeper.server.service.AdRequestService;
 import org.gatekeeper.server.service.DspBiddingsService;
 import org.gatekeeper.server.service.SspRulesService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,21 +59,21 @@ public class RouteConfiguration {
         router.route(SPARROW_API_V1_PREFIX + "/*")
                 .handler(handlerRegistry.get("requestLogHandler"));
 
-        router.post(SPARROW_API_V1_PREFIX + "/bidding-model")
+        router.post(SPARROW_API_V1_PREFIX + "/dsp/bidding-model")
                 .handler(handlerRegistry.get("biddingModelValidationHandler"))
                 .handler(handlerRegistry.get("biddingModelHandler"))
                 .handler(handlerRegistry.get("responseHandler"));
 
-        router.post(SPARROW_API_V1_PREFIX + "/inventory-rules")
+        router.post(SPARROW_API_V1_PREFIX + "/ssp/inventory-rules")
                 .handler(handlerRegistry.get("inventoryRulesValidationHandler"))
                 .handler(handlerRegistry.get("inventoryRulesHandler"))
                 .handler(handlerRegistry.get("responseHandler"));
 
-        router.get(SPARROW_API_V1_PREFIX + "/ad-request")
+        router.get(SPARROW_API_V1_PREFIX + "/browser/interest-group-ad-request")
                 .handler(handlerRegistry.get("noCacheHandler"))
                 .handler(handlerRegistry.get("adRequestHandler"));
 
-        router.post(SPARROW_API_V1_PREFIX + "/bid-request")
+        router.post(SPARROW_API_V1_PREFIX + "/ssp/interest-group-bid-request")
                 .handler(handlerRegistry.get("bidRequestValidationHandler"))
                 .handler(handlerRegistry.get("bidRequestPreauctionHandler"));
 
@@ -86,17 +87,23 @@ public class RouteConfiguration {
 
     @Bean
     BidRequestValidationHandler bidRequestValidationHandler(
+            @Value("${request.ssp-bid-request.ad-request-lookup-timeout-millis}") long adRequestLookupMillis,
             JacksonMapper jacksonMapper,
             AdRequestService adRequestService) {
-        return new BidRequestValidationHandler(jacksonMapper, adRequestService);
+        var handler = new BidRequestValidationHandler(jacksonMapper, adRequestService);
+        handler.setAdRequestLookupTimeoutMillis(adRequestLookupMillis);
+        return handler;
     }
 
     @Bean
     BidRequestPreauctionHandler bidRequestPreauctionHandler(
+            @Value("${request.ssp-bid-request.bids-limit}") int bidsLimit,
             JacksonMapper jacksonMapper,
             DspBiddingsService dspBiddingsService,
             SspRulesService sspRulesService) {
-        return new BidRequestPreauctionHandler(jacksonMapper, dspBiddingsService, sspRulesService);
+        var handler = new BidRequestPreauctionHandler(jacksonMapper, dspBiddingsService, sspRulesService);
+        handler.setBidsLimit(bidsLimit);
+        return handler;
     }
 
     @Bean
