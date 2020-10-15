@@ -7,6 +7,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.gatekeeper.server.admin.service.WebSocketBroker;
 import org.gatekeeper.server.handler.FailureHandler;
 import org.gatekeeper.server.handler.NoCacheHandler;
 import org.gatekeeper.server.handler.RequestLogHandler;
@@ -77,7 +78,7 @@ public class RouteConfiguration {
                 .handler(handlerRegistry.get("bidRequestValidationHandler"))
                 .handler(handlerRegistry.get("bidRequestPreauctionHandler"));
 
-        router.get("/webroot/*").handler(handlerRegistry.get("staticHandler"));
+        router.get("/*").handler(handlerRegistry.get("staticHandler"));
         router.get("/").handler(handlerRegistry.get("staticHandler"));
 
         router.route()
@@ -147,8 +148,8 @@ public class RouteConfiguration {
     }
 
     @Bean
-    RequestLogHandler requestLogHandler() {
-        return new RequestLogHandler();
+    RequestLogHandler requestLogHandler(WebSocketBroker webSocketBroker) {
+        return new RequestLogHandler(webSocketBroker);
     }
 
     @Bean
